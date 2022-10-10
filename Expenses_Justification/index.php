@@ -21,7 +21,7 @@ if (!function_exists('expenses_justification')) {
             "name" => "myexpenses",
             "url" => "exjus_myexpenses",
             "class" => "dollar-sign",
-            "position" => 1,
+            "position" => 4,
         );
         return $sidebar_menu;
     }
@@ -29,75 +29,29 @@ if (!function_exists('expenses_justification')) {
 }
 
 //install dependencies
-register_installation_hook("Expenses Justification", function ($item_purchase_code) {
+register_installation_hook("Expenses_Justification", function ($item_purchase_code) {
+    include PLUGINPATH . "Expenses_Justification/install/do_install.php";
 });
 
 //add setting link to the plugin setting
-/*
-app_hooks()->add_filter('app_filter_action_links_of_Banner_Manager', function ($action_links_array) {
+app_hooks()->add_filter('app_filter_action_links_of_Expenses_Justification', function ($action_links_array) {
     $action_links_array = array(
-        anchor(get_uri("banner_manager_settings"), app_lang("settings")),
-        anchor(get_uri("banner_manager"), app_lang("banner_manager_banners")),
+        anchor(get_uri("expenses_justification_settings"), app_lang("settings")),
     );
 
     return $action_links_array;
 });
 
 
-//update plugin
-use Banner_Manager\Controllers\Banner_Manager_Updates;
-
-register_update_hook("Banner_Manager", function () {
-    $update = new Banner_Manager_Updates();
-    return $update->index();
-});
-*/
-
 //uninstallation: remove data from database
 register_uninstallation_hook("Expenses Justification", function () {
-    /*
     $dbprefix = get_db_prefix();
     $db = db_connect('default');
 
-    $sql_query = "DROP TABLE IF EXISTS `" . $dbprefix . "banner_manager_settings`;";
+    $sql_query = "DROP TABLE IF EXISTS `" . $dbprefix . "expenses_justification_settings`;";
     $db->query($sql_query);
 
-    $sql_query = "DROP TABLE IF EXISTS `" . $dbprefix . "banner_manager`;";
+    $sql_query = "DROP TABLE IF EXISTS `" . $dbprefix . "expenses_list`;";
     $db->query($sql_query);
-    */
 });
 
-/*
-//show banners
-use App\Controllers\Security_Controller;
-
-app_hooks()->add_action('app_hook_dashboard_announcement_extension', function () {
-    $instance = new Security_Controller(false);
-
-    $is_client = false;
-    if ($instance->login_user->user_type === "client") {
-        $is_client = true;
-    }
-
-    $options = array(
-        "user_id" => $instance->login_user->id,
-        "team_ids" => $instance->login_user->team_ids,
-        "is_client" => $is_client,
-        "is_alert" => true,
-    );
-
-    //check if there has any banner id in the link
-    //if has that, show only that banner
-    if (isset($_GET["banner"]) && $_GET["banner"] && can_manage_banner_manager()) {
-        $banner_id = $_GET["banner"];
-        $options = array("id" => $banner_id);
-    }
-
-    $Banner_Manager_model = new \Banner_Manager\Models\Banner_Manager_model();
-    $banners = $Banner_Manager_model->get_details($options)->getResult();
-    $view_data["banners"] = $banners;
-
-    echo view("Banner_Manager\Views\banner_manager\banners_alert", $view_data);
-    
-});
-*/
