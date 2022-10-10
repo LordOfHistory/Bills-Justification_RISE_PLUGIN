@@ -3,24 +3,24 @@
 defined('PLUGINPATH') or exit('No direct script access allowed');
 
 /*
-  Plugin Name: Prueba
-  Description: Crea una pestaña con una imagen.
-  Version: 1.1
+  Plugin Name: Expenses Justification
+  Description: RISE CRM plugin to manage all the workflow to justificate expenses.
+  Version: 0.1
   Requires at least: 3.0
   Author: JMCandilejo
-  Author URL: tamoschilling
+  Author URL: https://github.com/LordOfHistory/Bills-Justification_RISE_PLUGIN
  */
 
 //add menu item to left menu
-app_hooks()->add_filter('app_filter_staff_left_menu', 'prueba_left_menu');
+app_hooks()->add_filter('app_filter_staff_left_menu', 'expenses_justification');
 
-if (!function_exists('prueba_left_menu')) {
+if (!function_exists('expenses_justification')) {
 
-    function prueba_left_menu($sidebar_menu) {
-        $sidebar_menu["prueba"] = array(
-            "name" => "prueba",
-            "url" => "prueba",
-            "class" => "hash",
+    function expenses_justification($sidebar_menu) {
+        $sidebar_menu["expenses"] = array(
+            "name" => "myexpenses",
+            "url" => "exjus_myexpenses",
+            "class" => "dollar-sign",
             "position" => 1,
         );
         return $sidebar_menu;
@@ -28,16 +28,8 @@ if (!function_exists('prueba_left_menu')) {
 
 }
 
-//add admin setting menu item
-/*
-app_hooks()->add_filter('app_filter_admin_settings_menu', function ($settings_menu) {
-    $settings_menu["setup"][] = array("name" => "banner_manager", "url" => "banner_manager_settings");
-    return $settings_menu;
-});
-*/
-
 //install dependencies
-register_installation_hook("Prueba", function ($item_purchase_code) {
+register_installation_hook("Expenses Justification", function ($item_purchase_code) {
 });
 
 //add setting link to the plugin setting
@@ -62,7 +54,7 @@ register_update_hook("Banner_Manager", function () {
 */
 
 //uninstallation: remove data from database
-register_uninstallation_hook("Prueba", function () {
+register_uninstallation_hook("Expenses Justification", function () {
     /*
     $dbprefix = get_db_prefix();
     $db = db_connect('default');

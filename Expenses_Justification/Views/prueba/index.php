@@ -5,7 +5,6 @@
         </div>
         <div>
             <p> Hola buenas tardes </p>
-            <img src="<?php echo base_url('plugins/Prueba/files/banner_files/gumball.jpg'); ?>" />
         </div>
     </div>
 </div>
