@@ -3,7 +3,10 @@
         <div class="page-title clearfix">
             <h1 id="table-title"> <?php echo app_lang("myexpenses_h1") ?></h1>
             <div class="title-button-group">
-                <!-- Button -->
+                <?php echo anchor(get_uri("exjus_myexpenses/new_expense"), 
+                                        "<i data-feather='plus-circle' class='icon-16'></i> " . app_lang('add_expense'), 
+                                        array("class" => "btn btn-default", "title" => app_lang('add_expense')));
+                ?>
             </div>
         </div>
         <div class="table-responsive">

@@ -49,4 +49,26 @@ class Myexpenses extends Security_Controller {
 
         return $row_data;
     }
+
+    //New expenses web redirect
+    function new_expense($form=NULL){
+        //$this->can_manage_form_maker();
+        $formtype = NULL;
+        if ($form!=NULL)
+            $formtype = $form;
+        $view_data['formtype'] = $formtype;
+
+        //Prepara la lista de distintos forms que hay
+        $ruta = PLUGINPATH . "Expenses_Justification/Views/newexpense/forms";
+        $gestor = opendir($ruta);
+        $forms_dropdown = array();
+        while (($archivo = readdir($gestor)) !== false)  {
+            if ($archivo != "." && $archivo != ".."){
+                $forms_dropdown[] = array("id" => explode(".",$archivo)[0], "text" => explode(".",$archivo)[0]);
+            }
+        }
+        $view_data['forms_dropdown'] = json_encode($forms_dropdown);
+
+        return $this->template->rander('Expenses_Justification\Views\newexpense\index',$view_data);
+    }
 }
