@@ -9,3 +9,5 @@ $routes->get('exjus_myexpenses/(:any)', 'Myexpenses::$1', ['namespace' => 'Expen
 $routes->post('exjus_myexpenses/(:any)', 'Myexpenses::$1', ['namespace' => 'Expenses_Justification\Controllers']);
 $routes->get('exjus_myexpenses/(:any)/(:any)', 'Myexpenses::$1/$2', ['namespace' => 'Expenses_Justification\Controllers']);
 $routes->post('exjus_myexpenses/(:any)/(:any)', 'Myexpenses::$1/$2', ['namespace' => 'Expenses_Justification\Controllers']);
+$routes->get('exjus_myexpenses/(:any)/(:any)/(:any)', 'Myexpenses::$1/$2/$3', ['namespace' => 'Expenses_Justification\Controllers']);
+$routes->post('exjus_myexpenses/(:any)/(:any)/(:any)', 'Myexpenses::$1/$2/$3', ['namespace' => 'Expenses_Justification\Controllers']);

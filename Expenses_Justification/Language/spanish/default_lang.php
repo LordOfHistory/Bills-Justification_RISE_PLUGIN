@@ -4,5 +4,9 @@
 
 $lang["myexpenses"] = "Mis gastos";
 $lang["myexpenses_h1"] = "Mis gastos justificados";
+$lang["myexpenses_details"] = "Detalles del gasto";
+$lang["agenda_files"] = "Archivos de agenda";
+$lang["images"] = "Imágenes";
+$lang["receipts"] = "Recibos";
 
 return $lang;

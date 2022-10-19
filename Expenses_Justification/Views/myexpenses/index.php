@@ -29,7 +29,7 @@
                 {title: 'Type', "class": "w100"},
                 {title: 'Comments', "class": "w300"},
                 {visible: false, searchable: false},
-                {title: 'Date', "iDataSort": 2},
+                {title: 'Date', "iDataSort": 2, "class":"w100"},
                 {title: 'Status', "class": "text-center option w100"},
                 {title: "<i data-feather='info' class='icon-16'></i>", "class": "text-center option w100"}
             ],
