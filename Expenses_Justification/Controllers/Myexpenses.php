@@ -71,4 +71,78 @@ class Myexpenses extends Security_Controller {
 
         return $this->template->rander('Expenses_Justification\Views\newexpense\index',$view_data);
     }
+
+    //Funcion que guarda los datos introducidos en el formulario correspondiente.
+    function save() {
+        //$this->can_manage_form_maker();
+        //Parte común:
+        $now = new \DateTime();
+        $now_sql = $now->format('Y-m-d');
+
+        $data = array(
+            "type" => $this->request->getPost("type"),
+            "route" => uniqid(),
+            "profileid" => $this->login_user->id,
+            "date" => $now_sql,
+            "status" => "Requested",
+            "name" => $this->request->getPost("name"),
+        );
+
+        $all_data = null;
+        //Para formularios tipo Life
+        if ($this->request->getPost("type")=="Life"){
+            $all_data = array(
+                "location" => $this->request->getPost("location"),
+                "start_date" => $this->request->getPost("start_date"),
+                "end_date" => $this->request->getPost("end_date"),
+                "description" => $this->request->getPost("description"),
+                "agenda_files" => $this->savefiles("agenda_files",$data["route"]),
+                "images" => $this->savefiles("images",$data["route"]),
+                "receipts" => $this->savefiles("receipts",$data["route"]),
+                "total" => $this->request->getPost("total"),
+            );
+        }
+
+        //Añadimos en el campo correspondiente la data completa del formulario concreto
+        $data["data"] = json_encode($all_data);
+        $data = clean_data($data);
+        $save_id = $this->Expenses_model->ci_save($data);
+        if ($save_id) {
+            echo json_encode(array("success" => true, 'id' => $save_id, 'message' => app_lang('record_saved')));
+        } else {
+            echo json_encode(array("success" => false, 'message' => 'An error has ocurred'));
+        }
+    }
+
+    //Guarda ficheros 
+    function savefiles($postvar,$formid){
+        $data = array(); 
+        $errorUploadType = $statusMsg = ''; 
+
+        if(!empty($_FILES[$postvar]['name']) && count(array_filter($_FILES[$postvar]['name'])) > 0){ 
+            $filesCount = count($_FILES[$postvar]['name']);
+            for($i = 0; $i < $filesCount; $i++){             
+                $tmpFilePath = $_FILES[$postvar]['tmp_name'][$i];
+                //Make sure we have a file path
+                if ($tmpFilePath != ""){
+                    //Setup our new file path
+                    $dir = "plugins/Expenses_Justification/files/upload_form_files/".$formid."/";
+                    if (!file_exists($dir)){
+                        mkdir($dir);
+                    }
+                    $newFilePath = $dir. $_FILES[$postvar]['name'][$i];
+                    if (file_exists($newFilePath)){
+                        unlink($newFilePath);
+                    }
+     
+                    //Upload the file into the temp dir
+                    if(move_uploaded_file($tmpFilePath, $newFilePath)) {
+                        $data[] = $newFilePath;
+                    }
+                }
+            }
+        }
+        return $data;
+    } 
 }
+

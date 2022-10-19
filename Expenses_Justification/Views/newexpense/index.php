@@ -4,7 +4,7 @@
             <h1 id="table-title"><?php echo app_lang("add_expense");?></h1>
         </div>
     </div>
-    <?php echo form_open(get_uri("exjus_myexpenses/save"), array("id" => "expenses-form", "class" => "general-form", "role" => "form")); ?>
+    <?php echo form_open(get_uri("exjus_myexpenses/save"), array("id" => "expenses-form", "class" => "general-form", "role" => "form", "enctype"=>"multipart/form-data")); ?>
     <div class="modal-body clearfix post-dropzone">
         <div class="container-fluid">
             <div class="form-group">

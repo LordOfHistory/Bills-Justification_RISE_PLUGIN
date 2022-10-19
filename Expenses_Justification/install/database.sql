@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `expenses_justification_settings` (
 
 CREATE TABLE IF NOT EXISTS `expenses_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `route` text COLLATE utf8_unicode_ci NOT NULL,
   `profileid` int NOT NULL,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `date` date NOT NULL,

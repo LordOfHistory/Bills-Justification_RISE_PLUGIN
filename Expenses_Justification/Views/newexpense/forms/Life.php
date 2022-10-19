@@ -3,14 +3,14 @@
 </div>
 <div class="clearfix">
     <div class="row">
-        <label for="title" class="col-md-3"><?php echo app_lang('title'); ?></label>
+        <label for="name" class="col-md-3"><?php echo app_lang('title'); ?></label>
         <div class="form-group col-md-9">
             <?php
             echo form_input(array(
-                "id" => "title",
-                "name" => "title",
+                "id" => "name",
+                "name" => "name",
                 "class" => "form-control",
-                "placeholder" => "Title",
+                "placeholder" => "Name",
                 "required" => "true",
                 "data-rule-required" => true,
                 "data-msg-required" => app_lang("field_required")
@@ -43,7 +43,7 @@
                 "id" => "start_date",
                 "name" => "start_date",
                 "class" => "form-control datepicker",
-                "placeholder" => "YYYY-MM-DD",
+                "placeholder" => "MM/DD/YYYY",
                 "autocomplete" => "off",
                 "required" => "true",
                 "data-rule-required" => true,
@@ -59,7 +59,7 @@
                 "id" => "end_date",
                 "name" => "end_date",
                 "class" => "form-control datepicker",
-                "placeholder" => "YYYY-MM-DD",
+                "placeholder" => "MM/DD/YYYY",
                 "autocomplete" => "off",
                 "required" => "true",
                 "data-rule-required" => true,
@@ -100,7 +100,7 @@
     <div class="row">
         <label for="agenda_files" class="col-md-3"><i data-feather='upload' class='icon-16'></i> Upload event agenda with all details</label>
         <div class="col-md-3">
-            <input type="file" id="agenda_files" name="agenda_files" multiple="multiple" required="true" onchange="preview_names('agenda_files','display-agenda')"/>
+            <input type="file" id="agenda_files" name="agenda_files[]" multiple required="true" onchange="preview_names('agenda_files','display-agenda')"/>
         </div>
     </div>
     <div class="row" id="display-agenda" style="padding:10px">
@@ -114,7 +114,7 @@
     <div class="row">
         <label for="images" class="col-md-3"><i data-feather='upload' class='icon-16'></i> Upload images of the event</label>
         <div class="col-md-3">
-            <input type="file" id="images" name="images" multiple="multiple" required="true" onchange="preview('images','display-images')"/>
+            <input type="file" id="images" name="images[]" multiple required="true" onchange="preview('images','display-images')"/>
         </div>
     </div>
     <div class="row" id="display-images" style="padding:10px">
@@ -128,7 +128,7 @@
     <div class="row">
         <label for="receipts" class="col-md-3"><i data-feather='upload' class='icon-16'></i> Upload all the receipts generated during the event</label>
         <div class="col-md-3">
-            <input type="file" id="receipts" name="receipts" multiple="multiple" required="true" onchange="preview('receipts','display-receipts')"/>
+            <input type="file" id="receipts" name="receipts[]" multiple required="true" onchange="preview('receipts','display-receipts')"/>
         </div>
     </div>
     <div class="row" id="display-receipts" style="padding:10px">
@@ -141,7 +141,7 @@
     <div class="row">
         <label for="total" class="col-md-3">Total expense justified</label>
         <div class="col-md-3">
-            <input type="number" id="total" min="0" step="any" required="true" placeholder="0.00€" /> €
+            <input type="number" id="total" name="total" min="0" step="any" required="true" placeholder="0.00" /> €
         </div>
     </div>
 </div>
