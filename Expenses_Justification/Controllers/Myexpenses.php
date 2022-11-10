@@ -55,8 +55,14 @@ class Myexpenses extends Security_Controller {
             $comments = "";
         }
 
+        $action = "-";
+        if ($data->status == "w_for_finnances"){
+            $action = modal_anchor(get_uri("exjus_myexpenses/delete_form"), "<i data-feather='x' class='icon-16'></i>", array("class" => "delete", "title" => app_lang("delete"), "data-post-id" => $data->id));
+        }
+
 
         $row_data = array(
+            $data->id,
             $data->name,
             get_team_member_profile_link($data->profileid, $user),
             $data->type,
@@ -65,9 +71,33 @@ class Myexpenses extends Security_Controller {
             format_to_date($data->date, false),
             $status,
             $info,
+            $action,
         );
 
         return $row_data;
+    }
+
+    //Función que actúa cuando un usuario cancela una solicitud
+    function delete_form(){
+        $this->have_access();
+        $id = $this->request->getPost("id");
+        $model_info = $this->Expenses_model->get_one($id); 
+        $view_data['model_info'] = $model_info;
+        $view_data['submit_url'] = "exjus_myexpenses/deleted";
+        return $this->template->view('Expenses_Justification\Views\usefull\delete_form', $view_data);
+    }
+
+    //Función que guarda en bd que una solicitud a sido cancelada
+    function deleted(){
+        $this->have_access();
+        $id = $this->request->getPost("id");
+        $route = $this->request->getPost("route");
+        
+        if ($this->Expenses_model->fullDelete($id,$route)) {
+            echo json_encode(array("success" => true, 'id' => $id, 'message' => app_lang('record_saved')));
+        } else {
+            echo json_encode(array("success" => false, 'message' => app_lang('error_occurred')));
+        }
     }
 
     //New expenses web redirect

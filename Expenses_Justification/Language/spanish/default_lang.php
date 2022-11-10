@@ -40,7 +40,7 @@ $lang["w_for_payment"] = "Aceptado, pendiente de pago";
 $lang["payed"] = "Pagado";
 $lang["suggest_changes"] = "sugerir cambios";
 $lang["accept_expense_q"] = "Vas a aceptar esta petición";
-$lang["sure_undone"] = "¿Estas segur@? Esta acción no puede deshacerse.";
+$lang["sure_undone"] = "¿Estas segur@? Esta acción no podrá deshacerse.";
 $lang["reject_expense_q"] = "Vas a rechazar esta petición";
 $lang["deny_expense_q"] = "Vas a denegar esta petición";
 $lang["suggestions_motives"] = "Indica los motivos de el rechazo y algunas sugerencias para su aceptación";
@@ -50,5 +50,6 @@ $lang["juanma_comments"] = "Comentarios Juanma";
 $lang["upload_pay"] = "Subir justificante de pago";
 $lang["download_pay"] = "Descargar justificante de pago";
 $lang["payment_expense_q"] = "Pago realizado para la petición";
+$lang["delete_expense_q"] = "Vas a eliminar la petición";
 
 return $lang;

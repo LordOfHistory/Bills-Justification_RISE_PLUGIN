@@ -22,8 +22,9 @@
     $(document).ready(function () {
         $("#myexpenses-table").appTable({
             source: '<?php echo_uri("$uri_chunk/list_data") ?>',
-            order: [[6, 'desc']],
+            order: [[0, 'desc']],
             columns: [
+                {visible: false, searchable: false},
                 {title: 'Name', "class": "w100"},
                 {title: 'Author', "class": "w200"},
                 {title: 'Type', "class": "w100"},
@@ -31,7 +32,8 @@
                 {visible: false, searchable: false},
                 {title: 'Date', "iDataSort": 2, "class":"w100"},
                 {title: 'Status', "class": "text-center option w200"},
-                {title: "<i data-feather='info' class='icon-16'></i> Info", "class": "text-center option w100"}
+                {title: "<i data-feather='info' class='icon-16'></i> Info", "class": "text-center option w100"},
+                {title: "<i data-feather='feather' class='icon-16'></i> Action", "class": "text-center option w100"}
             ],
         });  
     });
