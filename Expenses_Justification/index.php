@@ -17,12 +17,44 @@ app_hooks()->add_filter('app_filter_staff_left_menu', 'expenses_justification');
 if (!function_exists('expenses_justification')) {
 
     function expenses_justification($sidebar_menu) {
-        $sidebar_menu["expenses"] = array(
-            "name" => "myexpenses",
-            "url" => "exjus_myexpenses",
-            "class" => "dollar-sign",
-            "position" => 4,
-        );
+        $have_expenses = false;
+        if (is_admin() || can_manage_myexpenses()){
+            $have_expenses = true;
+            $sidebar_submenu["myexpenses"] = array(
+                "name" => "myexpenses",
+                "url" => "exjus_myexpenses",
+            );
+        }
+        if (is_admin() || can_manage_juanma_expenses()){
+            $have_expenses = true;
+            $sidebar_submenu["juanma_expenses"] = array(
+                "name" => "juanma_expenses",
+                "url" => "exjus_juanma_expenses",
+            );
+        }
+        if (is_finnances()){
+            $have_expenses = true;
+            $sidebar_submenu["finnances"] = array(
+                "name" => "finnances",
+                "url" => "exjus_finnances",
+            );
+        }
+        if (is_juanma()){
+            $have_expenses = true;
+            $sidebar_submenu["juanma"] = array(
+                "name" => "juanma",
+                "url" => "exjus_juanma",
+            );
+        }
+        if ($have_expenses){
+            $sidebar_menu["exjus"] = array(
+                "name" => "exjus",
+                "url" => "",
+                "class" => "dollar-sign",
+                "position" => 4,
+                "submenu" => $sidebar_submenu
+            );
+        }
         return $sidebar_menu;
     }
 

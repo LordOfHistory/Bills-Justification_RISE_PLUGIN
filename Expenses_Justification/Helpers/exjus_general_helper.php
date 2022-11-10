@@ -23,19 +23,91 @@ if (!function_exists('get_exjus_setting')) {
 }
 
 /**
- * check if the user is save as an administrator for the plugin
+ * check if the user can manage expenses
  * 
  * @param none
- * @return boolean true if it is administrator
+ * @return boolean true if it is
  */
-if (!function_exists('can_manage_form_maker')) {
+if (!function_exists('can_manage_myexpenses')) {
 
-    function can_manage_form_maker() {
-        $form_maker_users = get_form_maker_setting("form_maker_users");
-        $form_maker_users = explode(',', $form_maker_users);
+    function can_manage_myexpenses() {
+        $canjustify_users = get_exjus_setting("canjustify_users");
+        $exjus_users = explode(',', $canjustify_users);
         $instance = new Security_Controller();
 
-        if ($instance->login_user->is_admin || in_array($instance->login_user->id, $form_maker_users)) {
+        if (in_array($instance->login_user->id, $exjus_users)) {
+            return true;
+        }
+    }
+}
+
+/**
+ * check if the user can manage juanma expenses
+ * 
+ * @param none
+ * @return boolean true if it is
+ */
+if (!function_exists('can_manage_juanma_expenses')) {
+
+    function can_manage_juanma_expenses() {
+        $exjus_users = get_exjus_setting("canjustifyjuanma_users");
+        $exjus_users = explode(',', $exjus_users);
+        $instance = new Security_Controller();
+
+        if (in_array($instance->login_user->id, $exjus_users)) {
+            return true;
+        }
+    }
+}
+
+/**
+ * check if the user is from finnances
+ * 
+ * @param none
+ * @return boolean true if it is
+ */
+if (!function_exists('is_finnances')) {
+
+    function is_finnances() {
+        $exjus_users = get_exjus_setting("finances_users");
+        $exjus_users = explode(',', $exjus_users);
+        $instance = new Security_Controller();
+
+        if (in_array($instance->login_user->id, $exjus_users)) {
+            return true;
+        }
+    }
+}
+
+/**
+ * check if the user is juanma
+ * @param none
+ * @return boolean true if it is
+ */
+if (!function_exists('is_juanma')) {
+
+    function is_juanma() {
+        $exjus_users = get_exjus_setting("juanma_profile");
+        $exjus_users = explode(',', $exjus_users);
+        $instance = new Security_Controller();
+
+        if (in_array($instance->login_user->id, $exjus_users)) {
+            return true;
+        }
+    }
+}
+
+/**
+ * check if the user is juanma
+ * @param none
+ * @return boolean true if it is
+ */
+if (!function_exists('is_admin')) {
+
+    function is_admin() {
+        $instance = new Security_Controller();
+
+        if ($instance->login_user->is_admin) {
             return true;
         }
     }
@@ -59,3 +131,50 @@ if (!function_exists('exjus_load_css')) {
 
 }
 
+/**
+ * indicata if there is a selected juanma profile or not 
+ * 
+ * @param none
+ * @return boolean
+ */
+if (!function_exists('juanma_profile_selected')) {
+    function juanma_profile_selected(){
+        $result = false;
+        $profileid = get_exjus_setting("juanma_profile");
+        if ($profileid != "" && $profileid!= null){
+            $result = true;
+        }
+        return $result;
+    }
+}
+
+/**
+ * Return a color code acording to de the status pass as parameter 
+ * 
+ * @param string
+ * @return string
+ */
+if (!function_exists('getStatusColor')) {
+    function getStatusColor($status){
+        $color = "#474747";
+        if ($status == "w_for_finnances"){
+            $color = "#E8930F";
+        }
+        if ($status == "w_for_juanma"){
+            $color = "#E8930F";
+        }
+        if ($status == "w_for_payment"){
+            $color = "#0F7CE8";
+        }
+        if ($status =="payed"){
+            $color = "#1CBF30";
+        }
+        if ($status =="rej_by_finnances"){
+            $color = "#E6C80D";
+        }
+        if ($status == "killed"){
+            $color = "#E02727";
+        }
+        return $color;
+    }
+}

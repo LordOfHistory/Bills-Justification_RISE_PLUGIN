@@ -14,7 +14,7 @@ class Settings extends Security_Controller {
     }
 
     function index() {
-        $team_members = $this->Users_model->get_all_where(array("deleted" => 0, "user_type" => "staff", "is_admin" => 0))->getResult();
+        $team_members = $this->Users_model->get_all_where(array("deleted" => 0, "user_type" => "staff"))->getResult();
         $members_dropdown = array();
         foreach ($team_members as $team_member) {
             $members_dropdown[] = array("id" => $team_member->id, "text" => $team_member->first_name . " " . $team_member->last_name);
@@ -23,14 +23,13 @@ class Settings extends Security_Controller {
 
         return $this->template->rander('Expenses_Justification\Views\settings\index', $view_data);
     }
-
+    
     function save_settings() {
         $settings = array(
-            "days_near_go",
-            "days_near_arrive",
-            "days_to_suspend",
-            "autosuspend",
-            "form_maker_users",
+            "canjustify_users",
+            "canjustifyjuanma_users",
+            "finances_users",
+            "juanma_profile",
         );
 
         foreach ($settings as $setting) {
@@ -38,8 +37,10 @@ class Settings extends Security_Controller {
             if (is_null($value)) {
                 $value = "";
             }
-            $this->Form_Maker_settings_model->save_setting($setting, $value);
+            $this->Expenses_settings_model->save_setting($setting, $value);
         }
         echo json_encode(array("success" => true, 'message' => app_lang('settings_updated')));
     }
+
+
 }

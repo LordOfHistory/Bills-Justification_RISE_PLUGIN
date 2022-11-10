@@ -4,7 +4,7 @@
             <h1 id="table-title"><?php echo app_lang("add_expense");?></h1>
         </div>
     </div>
-    <?php echo form_open(get_uri("exjus_myexpenses/save"), array("id" => "expenses-form", "class" => "general-form", "role" => "form", "enctype"=>"multipart/form-data")); ?>
+    <?php echo form_open(get_uri("exjus_myexpenses/save/$prev_page"), array("id" => "expenses-form", "class" => "general-form", "role" => "form", "enctype"=>"multipart/form-data")); ?>
     <div class="modal-body clearfix post-dropzone">
         <div class="container-fluid">
             <div class="form-group">
@@ -16,6 +16,7 @@
                             "name" => "type",
                             "value" => $formtype,
                             "class" => "form-control",
+                            "required" => "true",
                             "placeholder" => app_lang('type'),));?>
                     </div>
                 </div>
@@ -28,7 +29,7 @@
         }
         ?>
         <div class="modal-footer">
-            <?php echo anchor(get_uri("exjus_myexpenses"), 
+            <?php echo anchor(get_uri("$prev_page"), 
                         "<i data-feather='x-circle' class='icon-16'></i> " . app_lang('cancel'), 
                         array("class" => "btn btn-default", "title" => app_lang('cancel')));?>
             <button type="submit" class="btn btn-primary"><span data-feather="check-circle" class="icon-16"></span> <?php echo app_lang('save'); ?></button>
@@ -41,8 +42,7 @@
     "use strict";
 
     function ajaxRequest(controller,method,data) {
-        let uri = '<?php echo_uri("")?>'+controller+'/'+method+'/'+data;
-        alert (uri);
+        let uri = '<?php echo_uri("")?>'+controller+'/'+method+'<?php echo("//$prev_page//")?>'+data;
         let http = new XMLHttpRequest();
         http.onreadystatechange = function(){
             if(this.readyState == 4 && this.status == 200){
@@ -58,7 +58,7 @@
             data: <?php echo ($forms_dropdown); ?>
         });
         $("#type").on('change.select2', function(){
-            window.location.href = '<?php echo_uri("exjus_myexpenses/new_expense")?>'+'/'+this.value;
+            window.location.href = '<?php echo_uri("exjus_myexpenses/new_expense/$prev_page")?>'+'/'+this.value;
         });
         //Preparing text areas
         $("textarea").each(function () {

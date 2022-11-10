@@ -10,10 +10,13 @@ CREATE TABLE IF NOT EXISTS `expenses_list` (
   `route` text COLLATE utf8_unicode_ci NOT NULL,
   `profileid` int NOT NULL,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
+  `justificant` text COLLATE utf8_unicode_ci,
   `date` date NOT NULL,
   `comments` text COLLATE utf8_unicode_ci,
   `type` text COLLATE utf8_unicode_ci,
+  `code` text COLLATE utf8_unicode_ci,
   `status` text COLLATE utf8_unicode_ci,
+  `total` float NOT NULL,
   `data` text COLLATE utf8_unicode_ci,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)

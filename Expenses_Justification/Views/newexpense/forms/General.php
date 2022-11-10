@@ -136,6 +136,7 @@
         <label for="total" class="col-md-3">Total expense justified</label>
         <div class="col-md-3">
             <span id="total-value">0.00</span> €
+            <input type="hidden" id="total" name="total"/>
         </div>
     </div>
 </div>
@@ -210,7 +211,9 @@
                 total += parseFloat(gastos[i].value);
         }
         var totalelement = document.getElementById("total-value");
+        var totalinput = document.getElementById("total");
         totalelement.innerText = total.toFixed(2)==NaN?total:total.toFixed(2);
+        totalinput.value = total.toFixed(2);
     }
 
     function removeInputField(id){
@@ -277,7 +280,7 @@
                     <label for="name-`+id+`" class="item"><?php echo app_lang('title'); ?>: </label>
                 </div>
                 <div class="col-md-10">
-                    <input type="text" name="name-`+id+`" id="name-`+id+`" class="form-control" placeholder="<?php echo app_lang("title")?>" autocomplete="off" required="true" data-rule-required="1" data-msg-required="Este campo es requerido." hidden/>
+                    <input type="text" name="name-`+id+`" id="name-`+id+`" class="form-control" placeholder="<?php echo app_lang("title")?>" autocomplete="off" required="true" data-rule-required="1" data-msg-required="Este campo es requerido."/>
                 </div>
             </div>
             <div class="row" style="margin-bottom:10px">

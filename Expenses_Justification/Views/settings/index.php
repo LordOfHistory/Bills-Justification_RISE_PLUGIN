@@ -19,19 +19,64 @@
                 <div class="card-body post-dropzone">
                     <div class="form-group">
                         <div class="row">
-                            <label for="myexpenses_users" class=" col-md-3"><?php echo app_lang('who_can_manage'); ?> <span class="help" data-bs-toggle="tooltip" title="<?php echo app_lang('form_maker_users_help_message'); ?>"><i data-feather='help-circle' class="icon-16"></i></span></label>
+                            <label for="canjustify_users" class=" col-md-3"><?php echo app_lang('canjustify_users'); ?>:</label>
                             <div class=" col-md-9">
                                 <?php
                                 echo form_input(array(
-                                    "id" => "myexpenses_users",
-                                    "name" => "myexpenses_users",
-                                    "value" => get_exjus_setting("myexpenses_users"),
+                                    "id" => "canjustify_users",
+                                    "name" => "canjustify_users",
+                                    "value" => get_exjus_setting("canjustify_users"),
                                     "class" => "form-control",
                                     "placeholder" => app_lang('team_members')
                                 ));
                                 ?>
                             </div>
                         </div>
+                        <br/>
+                        <div class="row">
+                        <label for="canjustifyjuanma_users" class=" col-md-3"><?php echo app_lang('canjustifyjuanma_users'); ?>:</label>
+                            <div class=" col-md-9">
+                                <?php
+                                echo form_input(array(
+                                    "id" => "canjustifyjuanma_users",
+                                    "name" => "canjustifyjuanma_users",
+                                    "value" => get_exjus_setting("canjustifyjuanma_users"),
+                                    "class" => "form-control",
+                                    "placeholder" => app_lang('team_members')
+                                ));
+                                ?>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <label for="finances_users" class=" col-md-3"><?php echo app_lang('finances_users'); ?>:</label>
+                            <div class=" col-md-9">
+                                <?php
+                                echo form_input(array(
+                                    "id" => "finances_users",
+                                    "name" => "finances_users",
+                                    "value" => get_exjus_setting("finances_users"),
+                                    "class" => "form-control",
+                                    "placeholder" => app_lang('team_members')
+                                ));
+                                ?>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <label for="juanma_profile" class=" col-md-3"><?php echo app_lang('juanma_profile'); ?>:</label>
+                            <div class=" col-md-9">
+                                <?php
+                                echo form_input(array(
+                                    "id" => "juanma_profile",
+                                    "name" => "juanma_profile",
+                                    "value" => get_exjus_setting("juanma_profile"),
+                                    "class" => "form-control",
+                                    "placeholder" => app_lang('team_members')
+                                ));
+                                ?>
+                            </div>
+                        </div>                        
                     </div>
                 </div>
 
@@ -55,12 +100,28 @@
             }
         });
 
-        $("#myexpenses_users").select2({
+        $("#canjustify_users").select2({
             minimumResultsForSearch: 3,
             multiple: true,
             data: <?php echo ($members_dropdown); ?>
         });
 
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        $("#canjustifyjuanma_users").select2({
+            minimumResultsForSearch: 3,
+            multiple: true,
+            data: <?php echo ($members_dropdown); ?>
+        });
+
+        $("#finances_users").select2({
+            minimumResultsForSearch: 3,
+            multiple: true,
+            data: <?php echo ($members_dropdown); ?>
+        });
+
+        $("#juanma_profile").select2({
+            minimumResultsForSearch: 3,
+            multiple: false,
+            data: <?php echo ($members_dropdown); ?>
+        });
     });
 </script>

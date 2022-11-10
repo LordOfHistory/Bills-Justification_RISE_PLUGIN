@@ -19,8 +19,23 @@
         </div>
     </div>
     <div class="row">
+        <label for="code" class="col-md-3"><?php echo app_lang('code'); ?></label>
+        <div class="form-group col-md-3">
+            <?php
+            echo form_input(array(
+                "id" => "code",
+                "name" => "code",
+                "class" => "form-control",
+                "placeholder" => "Code",
+                "autocomplete" => "off",
+                "required" => "true",
+                "data-rule-required" => true,
+                "data-msg-required" => app_lang("field_required")
+            ));
+            ?>
+        </div>
         <label for="location" class="col-md-3"><?php echo app_lang('location'); ?></label>
-        <div class="form-group col-md-9">
+        <div class="form-group col-md-3">
             <?php
             echo form_input(array(
                 "id" => "location",

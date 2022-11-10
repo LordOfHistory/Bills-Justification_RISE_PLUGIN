@@ -4,7 +4,7 @@ namespace Expenses_Justification\Controllers;
 
 use App\Controllers\Security_Controller;
 
-class Myexpenses extends Security_Controller {
+class Juanmaexpenses extends Security_Controller {
 
     protected $Expenses_model;
 
@@ -14,13 +14,13 @@ class Myexpenses extends Security_Controller {
     }
 
     function index() {
-        $data = array("title"=>"myexpenses_h1", "uri_chunk"=>"exjus_myexpenses");
+        $data = array("title"=>"juanma_expenses", "uri_chunk"=>"exjus_juanma_expenses");
         return $this->template->rander('Expenses_Justification\Views\myexpenses\index',$data);
     }
 
     //Función para comprobar que tiene acceso a esta pestaña
     private function have_access(){
-        if (!can_manage_myexpenses() && !is_admin()) {
+        if (!can_manage_juanma_expenses() && !is_admin()) {
             app_redirect("forbidden");
         }
     }
@@ -28,7 +28,7 @@ class Myexpenses extends Security_Controller {
     //Función que devuelve la tabla de datos completa de la base de datos
     function list_data() {    
         $this->have_access();
-        $options = array("profileid"=>$this->login_user->id);
+        $options = array("profileid"=>get_exjus_setting("juanma_profile"));
         $list_data = $this->Expenses_model->get_details($options)->getResult();
 
         $result = array();
@@ -45,22 +45,16 @@ class Myexpenses extends Security_Controller {
 
         $status = "<div style='background-color:".getStatusColor($data->status)."; border-radius:10px; color:white; padding:5px'><span>".app_lang($data->status)."</span></div>";
 
-        $info = anchor(get_uri("exjus_myexpenses/expense_details/".$data->id), "<i data-feather='eye' class='icon-16'></i>", array("class"=>"details", "title"=>app_lang("view_details")));
+        $info = anchor(get_uri("exjus_myexpenses/expense_details/".$data->id."/exjus_juanma_expenses"), "<i data-feather='eye' class='icon-16'></i>", array("class"=>"details", "title"=>app_lang("view_details")));
         if ($data->justificant!="" && $data->justificant!=null && $data->justificant){
             $info .= anchor(get_uri("exjus_myexpenses/download/$data->route/$data->justificant"), "<i data-feather='download' class='icon-16'></i>", array("class" => "download", "title"=>app_lang("download_pay")));
         }
-
-        $comments = $data->comments;
-        if (explode(">",$data->comments)[0] == "<b"){
-            $comments = "";
-        }
-
 
         $row_data = array(
             $data->name,
             get_team_member_profile_link($data->profileid, $user),
             $data->type,
-            $comments,
+            $data->comments,
             $data->date,
             format_to_date($data->date, false),
             $status,
@@ -70,48 +64,18 @@ class Myexpenses extends Security_Controller {
         return $row_data;
     }
 
-    //New expenses web redirect
-    function new_expense($path,$form=NULL){
-        $this->have_access();
-        $formtype = NULL;
-        if ($form!=NULL)
-            $formtype = $form;
-        $view_data['formtype'] = $formtype;
-
-        //Prepara la lista de distintos forms que hay
-        $ruta = PLUGINPATH . "Expenses_Justification/Views/newexpense/forms";
-        $gestor = opendir($ruta);
-        $forms_dropdown = array();
-        while (($archivo = readdir($gestor)) !== false)  {
-            if ($archivo != "." && $archivo != ".."){
-                $forms_dropdown[] = array("id" => explode(".",$archivo)[0], "text" => explode(".",$archivo)[0]);
-            }
-        }
-        $view_data['forms_dropdown'] = json_encode($forms_dropdown);
-        $view_data['prev_page'] = $path;
-        return $this->template->rander('Expenses_Justification\Views\newexpense\index',$view_data);
-    }
-
     //Funcion que guarda los datos introducidos en el formulario correspondiente.
-    function save($prev_page="exjus_myexpenses") {
+    function save() {
         $this->have_access();
         //Parte común:
         $now = new \DateTime();
         $now_sql = $now->format('Y-m-d');
 
-        //Comprobamos si venimos de la pestaña de juanma poner el profileId adecuado
-        if ($prev_page == "exjus_juanma_expenses"){
-            $profileid = get_exjus_setting("juanma_profile");
-        }
-        else{
-            $profileid = $this->login_user->id;
-        }
-
         $data = array(
             "type" => $this->request->getPost("type"),
             "code" => $this->request->getPost("code"),
             "route" => uniqid(),
-            "profileid" => $profileid,
+            "profileid" => get_exjus_setting("juanma_profile"),
             "date" => $now_sql,
             "status" => "w_for_finnances",
             "name" => $this->request->getPost("name"),
@@ -177,10 +141,10 @@ class Myexpenses extends Security_Controller {
         $data = clean_data($data);
         $save_id = $this->Expenses_model->ci_save($data);
         if ($save_id) {
-            $view_data['redirect'] = "$prev_page/index";
+            $view_data['redirect'] = "exjus_juanma_expenses/index";
             return $this->template->rander('Expenses_Justification\Views\usefull\success',$view_data);
         } else {
-            $view_data['redirect'] = "$prev_page/index";
+            $view_data['redirect'] = "exjus_juanma_expenses/index";
             return $this->template->rander('Expenses_Justification\Views\usefull\fail',$view_data);
         }   
     }
@@ -215,48 +179,4 @@ class Myexpenses extends Security_Controller {
         }
         return $data;
     } 
-
-    //Expense details: devuelve la vista detallada de un gasto:
-    function expense_details($id=0,$prev_page="exjus_myexpenses"){
-        $this->have_access();
-        $model_info = $this->Expenses_model->get_one($id);
-
-        $userdb = $this->Users_model->get_one($model_info->profileid);
-        $image_url = get_avatar($userdb->image);
-        $user_photo = "<span class='avatar avatar-xs mr10'><img src='$image_url' alt=''></span> $userdb->first_name $userdb->last_name";
-        $user = get_team_member_profile_link($model_info->profileid, $user_photo);
-
-        $view_data['model_info'] = $model_info;
-        $view_data['user'] = $user;
-        $view_data["prev_page"] = $prev_page;
-        return $this->template->rander('Expenses_Justification\Views\expensesdetails\details', $view_data);
-
-    }
-
-    function download($route=null,$file=null){
-        $this->have_access();
-        if ($route != null){
-            $filename = "plugins/Expenses_Justification/files/upload_form_files/$route/$file";
-            //Check the file exists or not
-            if(file_exists($filename)) {
-                //Define header information
-                header('Content-Description: File Transfer');
-                header('Content-Type: application/octet-stream');
-                header("Cache-Control: no-cache, must-revalidate");
-                header("Expires: 0");
-                header('Content-Disposition: attachment; filename="'.$file.'"');
-                header('Content-Length: ' . filesize($filename));
-                header('Pragma: public');
-                //Clear system output buffer
-                flush();
-                //Read the size of the file
-                readfile($filename);
-                //Terminate from the script
-                die();
-            }
-            else{
-                echo "File does not exist.";
-            }
-        }
-    }
 }
