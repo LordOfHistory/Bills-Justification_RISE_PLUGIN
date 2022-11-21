@@ -7,6 +7,10 @@
                                         "<i data-feather='plus-circle' class='icon-16'></i> " . app_lang('add_expense'), 
                                         array("class" => "btn btn-default", "title" => app_lang('add_expense')));
                 ?>
+                <?php echo anchor(get_uri("exjus_myexpenses/send"), 
+                                        "<i data-feather='send' class='icon-16'></i> " . app_lang('send'), 
+                                        array("class" => "btn btn-default", "title" => app_lang('send')));
+                ?>
             </div>
         </div>
         <div class="table-responsive">
@@ -57,5 +61,33 @@ td.option a.reject:hover{
     background-color: #E6C80D;
     color: #fff;
     border: 1px solid #E6C80D;
+}
+
+
+td.option a.edit {
+  animation-name: anim;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes anim{
+    0% {
+        color: #a1a3a5;
+        transform: scale(1);
+        border: 1px solid #a1a3a5;
+        background-color: white;
+    } 
+    50% {
+        background-color: #ECB734;
+        transform: scale(1.2);
+        border: 1px solid #ECB734;
+        color: white;
+    } 
+    100% {
+        color: #a1a3a5;
+        transform: scale(1);
+        border: 1px solid #a1a3a5;
+        background-color: white;
+    } 
 }
 </style>

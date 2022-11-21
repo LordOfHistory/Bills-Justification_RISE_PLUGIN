@@ -6,7 +6,7 @@
     </div>
     <?php echo form_open(get_uri("exjus_myexpenses/save/$prev_page"), array("id" => "expenses-form", "class" => "general-form", "role" => "form", "enctype"=>"multipart/form-data")); ?>
     <div class="modal-body clearfix post-dropzone">
-        <div class="container-fluid">
+        <div class="container-fluid" style="visibility:<?php echo $edit?'hidden':'visible'?>">
             <div class="form-group">
                 <div class="row">
                     <label for="type" class=" col-md-3"><?php echo app_lang('type'); ?></label>
@@ -22,6 +22,8 @@
                 </div>
             </div>       
         </div>
+        <input type="hidden" name="id" id="id-input" value="<?php echo $model_info->id?>"/>
+        <input type="hidden" name="route" id="route-input" value="<?php echo $model_info->route?>"/>
         <?php 
         if ($formtype!= null && $formtype!=""){
             echo ("<hr/>");

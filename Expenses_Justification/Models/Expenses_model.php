@@ -59,4 +59,16 @@ class Expenses_model extends Crud_model {
             rmdir($carpeta);
         }
     }
+
+    function justUpdate($entry){
+        $expenses_table = $this->db->prefixTable('expenses_list');
+        $set = [];
+        foreach ($entry as $clave=>$valor){
+            $set[] = "$expenses_table.$clave = '$valor'";
+        }
+        $set = implode(", ",$set);
+        $sql = "UPDATE $expenses_table SET $set 
+                WHERE $expenses_table.id = '".$entry["id"]."'";
+        return $this->db->query($sql);
+    }
 }

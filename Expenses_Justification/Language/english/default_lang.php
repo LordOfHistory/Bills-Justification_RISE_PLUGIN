@@ -51,5 +51,6 @@ $lang["upload_pay"] = "Upload payment justiicant";
 $lang["download_pay"] = "Download payment justiicant";
 $lang["payment_expense_q"] = "Payment done for request";
 $lang["delete_expense_q"] = "You are about to delete the request";
+$lang["new_files"] = "Aditional files";
 
 return $lang;

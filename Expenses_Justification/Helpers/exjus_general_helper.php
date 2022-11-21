@@ -170,7 +170,7 @@ if (!function_exists('getStatusColor')) {
             $color = "#1CBF30";
         }
         if ($status =="rej_by_finnances"){
-            $color = "#E6C80D";
+            $color = "#ECB734";
         }
         if ($status == "killed"){
             $color = "#E02727";

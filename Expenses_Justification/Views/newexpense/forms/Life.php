@@ -1,3 +1,5 @@
+<?php //Preparamos los datos del modelo, para en caso de edición ponerlos en los campos correspondientes
+$datos = json_decode($model_info->data);?>
 <div id="form-title" style="text-align:center">
     <h2 style="color:#304FC6">EXPENDITURE SETTLEMENT REPORT</h2>
 </div>
@@ -9,6 +11,7 @@
             echo form_input(array(
                 "id" => "name",
                 "name" => "name",
+                "value" => $model_info->name,
                 "class" => "form-control",
                 "placeholder" => "Name",
                 "required" => "true",
@@ -19,27 +22,13 @@
         </div>
     </div>
     <div class="row">
-        <label for="code" class="col-md-3"><?php echo app_lang('code'); ?></label>
-        <div class="form-group col-md-3">
-            <?php
-            echo form_input(array(
-                "id" => "code",
-                "name" => "code",
-                "class" => "form-control",
-                "placeholder" => "Code",
-                "autocomplete" => "off",
-                "required" => "true",
-                "data-rule-required" => true,
-                "data-msg-required" => app_lang("field_required")
-            ));
-            ?>
-        </div>
         <label for="location" class="col-md-3"><?php echo app_lang('location'); ?></label>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-9">
             <?php
             echo form_input(array(
                 "id" => "location",
                 "name" => "location",
+                "value" => isset($datos->location)?$datos->location:null,
                 "class" => "form-control",
                 "placeholder" => "City, country",
                 "autocomplete" => "off",
@@ -57,6 +46,7 @@
             echo form_input(array(
                 "id" => "start_date",
                 "name" => "start_date",
+                "value" => isset($datos->start_date)?$datos->start_date:null,
                 "class" => "form-control datepicker",
                 "placeholder" => "MM/DD/YYYY",
                 "autocomplete" => "off",
@@ -73,6 +63,7 @@
             echo form_input(array(
                 "id" => "end_date",
                 "name" => "end_date",
+                "value" => isset($datos->end_date)?$datos->end_date:null,
                 "class" => "form-control datepicker",
                 "placeholder" => "MM/DD/YYYY",
                 "autocomplete" => "off",
@@ -97,6 +88,7 @@
             echo form_textarea(array(
                 "id" => "description",
                 "name" => "description",
+                "value" => isset($datos->description)?$datos->description:null,
                 "class" => "form-control",
                 "placeholder" => app_lang('description'),
                 "required" => "true",
@@ -115,7 +107,8 @@
     <div class="row">
         <label for="agenda_files" class="col-md-3"><i data-feather='upload' class='icon-16'></i> Upload event agenda with all details</label>
         <div class="col-md-3">
-            <input type="file" id="agenda_files" name="agenda_files[]" multiple required="true" onchange="preview_names('agenda_files','display-agenda')"/>
+            <input type="hidden" id="old_agenda" name="old_agenda_files" value="<?php echo isset($datos->agenda_files)?implode("::",$datos->agenda_files):""?>"/>
+            <input type="file" id="agenda_files" name="agenda_files[]" multiple <?php echo isset($datos->agenda_files)?"":"required"?> onchange="preview_names('agenda_files','display-agenda')"/>
         </div>
     </div>
     <div class="row" id="display-agenda" style="padding:10px">
@@ -129,7 +122,8 @@
     <div class="row">
         <label for="images" class="col-md-3"><i data-feather='upload' class='icon-16'></i> Upload images of the event</label>
         <div class="col-md-3">
-            <input type="file" id="images" name="images[]" multiple required="true" onchange="preview('images','display-images')"/>
+            <input type="hidden" id="old_images" name="old_images" value="<?php echo isset($datos->images)?implode("::",$datos->images):""?>"/>
+            <input type="file" id="images" name="images[]" multiple <?php echo isset($datos->images)?"":"required"?> onchange="preview('images','display-images')"/>
         </div>
     </div>
     <div class="row" id="display-images" style="padding:10px">
@@ -143,7 +137,8 @@
     <div class="row">
         <label for="receipts" class="col-md-3"><i data-feather='upload' class='icon-16'></i> Upload all the receipts generated during the event</label>
         <div class="col-md-3">
-            <input type="file" id="receipts" name="receipts[]" multiple required="true" onchange="preview('receipts','display-receipts')"/>
+            <input type="hidden" id="old_receipts" name="old_receipts" value="<?php echo isset($datos->receipts)?implode("::",$datos->receipts):""?>"/>
+            <input type="file" id="receipts" name="receipts[]" multiple <?php echo isset($datos->receipts)?"":"required"?> onchange="preview('receipts','display-receipts')"/>
         </div>
     </div>
     <div class="row" id="display-receipts" style="padding:10px">
@@ -156,7 +151,7 @@
     <div class="row">
         <label for="total" class="col-md-3">Total expense justified</label>
         <div class="col-md-3">
-            <input type="number" id="total" name="total" min="0" step="any" required="true" placeholder="0.00" /> €
+            <input type="number" id="total" value="<?php echo $model_info->total?>" name="total" min="0" step="any" required="true" placeholder="0.00" /> €
         </div>
     </div>
 </div>

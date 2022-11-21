@@ -51,5 +51,6 @@ $lang["upload_pay"] = "Subir justificante de pago";
 $lang["download_pay"] = "Descargar justificante de pago";
 $lang["payment_expense_q"] = "Pago realizado para la petición";
 $lang["delete_expense_q"] = "Vas a eliminar la petición";
+$lang["new_files"] = "Archivos adicionales";
 
 return $lang;

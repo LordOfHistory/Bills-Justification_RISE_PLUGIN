@@ -59,7 +59,9 @@ class Myexpenses extends Security_Controller {
         if ($data->status == "w_for_finnances"){
             $action = modal_anchor(get_uri("exjus_myexpenses/delete_form"), "<i data-feather='x' class='icon-16'></i>", array("class" => "delete", "title" => app_lang("delete"), "data-post-id" => $data->id));
         }
-
+        if ($data->status == "rej_by_finnances"){
+            $action = anchor(get_uri("exjus_myexpenses/edit_form/$data->id"), "<i data-feather='edit-3' class='icon-16'></i>", array("class" => "edit", "title" => app_lang("edit"), "data-post-id" => $data->id));
+        }
 
         $row_data = array(
             $data->id,
@@ -87,6 +89,14 @@ class Myexpenses extends Security_Controller {
         return $this->template->view('Expenses_Justification\Views\usefull\delete_form', $view_data);
     }
 
+    //Función que actúa cuando un usuario edita una solicitud
+    function edit_form($id=0,$prev_page="exjus_myexpenses"){
+        $this->have_access();
+        $model_info = $this->Expenses_model->get_one($id);
+        return $this->new_expense($prev_page,$model_info->type,$id);
+    }
+
+
     //Función que guarda en bd que una solicitud a sido cancelada
     function deleted(){
         $this->have_access();
@@ -100,8 +110,20 @@ class Myexpenses extends Security_Controller {
         }
     }
 
+    function send(){
+        $to = "jamacande.bruselas@gmail.com";
+        $subject = "Mensaje generado desde la intranet";
+        $message = "hello bonna tarde";
+        $headers = array(
+            'From' => 'jamacande.jmc@gmail.com',
+            'Reply-To' => 'jamacande.jmc@gmail.com',
+            'X-Mailer' => 'PHP/' . phpversion()
+        );
+        echo mail($to,$subject,$message,$headers);
+    }
+
     //New expenses web redirect
-    function new_expense($path,$form=NULL){
+    function new_expense($path,$form=NULL,$id=NULL){
         $this->have_access();
         $formtype = NULL;
         if ($form!=NULL)
@@ -119,6 +141,12 @@ class Myexpenses extends Security_Controller {
         }
         $view_data['forms_dropdown'] = json_encode($forms_dropdown);
         $view_data['prev_page'] = $path;
+        $view_data['edit'] = $id==NULL?false:true;
+
+        $model_info = $this->Expenses_model->get_one($id);
+        $view_data['model_info'] = $model_info;
+
+
         return $this->template->rander('Expenses_Justification\Views\newexpense\index',$view_data);
     }
 
@@ -148,6 +176,11 @@ class Myexpenses extends Security_Controller {
             "total" => $this->request->getPost("total"),
         );
 
+        if ($this->request->getPost("id")!= ""){
+            $data["id"]=$this->request->getPost("id");
+            $data["route"]=$this->request->getPost("route");
+        }
+
         $all_data = null;
         //Para formulario general
         if ($this->request->getPost("type")=="General"){
@@ -175,16 +208,18 @@ class Myexpenses extends Security_Controller {
                     if ($this->request->getPost("price-".$id)!="")    
                         $expense["price"]=$this->request->getPost("price-".$id);
                     if ($this->request->getPost("description-".$id)!="")    
-                        $expense["description"]=$this->request->getPost("description-".$id);                                
-                    $expense["files"]=$this->savefiles("files-".$id,$data["route"]);  
+                        $expense["description"]=$this->request->getPost("description-".$id);
+                    $expense["files"]=$this->savefiles("files-".$id,$data["route"]); 
+                    if (($old_files = $this->request->getPost("old-files-".$id)) != ""); 
+                        $expense["files"]= array_merge(explode("::",$old_files),$expense["files"]);
                     $expenses[] = $expense;
                 }
             }
     
             $all_data = array(
                 "location" => $this->request->getPost("location"),
-                "code"  => $this->request->getPost("project-code"),
-                "start_date" => $this->request->getPost("end_date"),
+                "start_date" => $this->request->getPost("start_date"),
+                "end_date" => $this->request->getPost("end_date"),
                 "description" => $this->request->getPost("description"),
                 "expenses" => $expenses, 
             );
@@ -200,12 +235,23 @@ class Myexpenses extends Security_Controller {
                 "images" => $this->savefiles("images",$data["route"]),
                 "receipts" => $this->savefiles("receipts",$data["route"]),
             );
+            if (($old_files = $this->request->getPost("old_agenda_files")) != "")
+                $all_data["agenda_files"]= array_merge(explode("::",$old_files),$all_data["agenda_files"]);
+            if (($old_files = $this->request->getPost("old_images")) != "")
+                $all_data["images"]= array_merge(explode("::",$old_files),$all_data["images"]);
+            if (($old_files = $this->request->getPost("old_receipts")) != "")
+                $all_data["receipts"]= array_merge(explode("::",$old_files),$all_data["receipts"]);
         }
 
         //Añadimos en el campo correspondiente la data completa del formulario concreto
         $data["data"] = json_encode($all_data);
         $data = clean_data($data);
-        $save_id = $this->Expenses_model->ci_save($data);
+        if (isset($data["id"])){
+            $save_id = $this->Expenses_model->justUpdate($data);
+        }
+        else{
+            $save_id = $this->Expenses_model->ci_save($data);
+        }
         if ($save_id) {
             $view_data['redirect'] = "$prev_page/index";
             return $this->template->rander('Expenses_Justification\Views\usefull\success',$view_data);
